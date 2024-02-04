@@ -1,0 +1,108 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Python package
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install flake8 pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Lint with flake8
+      run: |
+      import tkinter as tk
+from math import floor
+# Значение x должно быть в пределах от 54.6 до 100
+def validate_x(x):
+    try:
+        x = float(x)
+        if 54.6 <= x <= 100:
+            return True
+        else:
+            return False
+    except ValueError:
+        return False
+
+# Значение k должно быть в пределах от 1 до 9
+def validate_k(k):
+    try:
+        k = float(k)
+        if 1 <= k <= 9:
+            return True
+        else:
+            return False
+    except ValueError:
+        return False
+
+def calculate_y():
+    x = entry_x.get()
+    k = entry_k.get()
+
+    if validate_x(x) and validate_k(k):
+        x = float(x)
+        k = float(k)
+        y = floor((x - 54.6) * 66 * k / 2) * 2
+        result_label.config(text=f"Необходимо внести воды: {y}")
+    else:
+        result_label.config(text="Некорректные значения ,исправьте")
+        
+
+# Создание окна приложения
+window = tk.Tk()
+
+# Название программы
+title_label = tk.Label(window, text="Кола Добрый SMR 1.01", font=("Arial", 16))
+title_label.pack()
+
+# Создание элементов интерфейса
+label_x = tk.Label(window, text="Введите Брикс сиропа:",font=("Arial",10))
+entry_x = tk.Entry(window)
+
+label_k = tk.Label(window, text="Введите кол-во единиц колы:",font=("Arial",10))
+entry_k = tk.Entry(window)
+
+button = tk.Button(window, text="Вычислить", command=calculate_y)
+
+result_label = tk.Label(window, text="")
+
+# Размещение элементов по середине
+title_label.pack(side="top", pady=100)
+label_x.pack()
+entry_x.pack()
+label_k.pack()
+entry_k.pack()
+button.pack()
+result_label.pack()
+
+
+
+# Запуск главного цикла приложения
+window.mainloop()
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Test with pytest
+      run: |
+        pytest
